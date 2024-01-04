@@ -10,6 +10,16 @@ export class SubebController {
       res.status(500).send({ message: 'Server Error', data: [] })
     }
   }
+  public async getUser(req: Request, res: Response) {
+    console.log(req.body.staffId)
+    try {
+      const subeb = await BaseModel.findOne('subeb', req.body.staffId)
+      res.status(200).send({ message: 'PHCB fetch succesfully', data: subeb })
+    } catch (error) {
+      res.status(500).send({ message: 'Server Error', data: [] })
+    }
+  }
+
   public async create(req: Request, res: Response) {
     try {
       const subeb = await BaseModel.create({ ...req.body }, 'subeb')

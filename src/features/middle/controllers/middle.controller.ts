@@ -12,6 +12,15 @@ export class MiddleController {
       res.status(500).send({ message: 'Server Error', data: [] })
     }
   }
+  public async getUser(req: Request, res: Response) {
+    console.log(req.body.staffId)
+    try {
+      const lga = await BaseModel.findOne('middle', req.body.staffId)
+      res.status(200).send({ message: 'Middle fetch succesfully', data: lga })
+    } catch (error) {
+      res.status(500).send({ message: 'Server Error', data: [] })
+    }
+  }
   public async create(req: Request, res: Response) {
     try {
       const middle = await BaseModel.create({ ...req.body }, 'middle')

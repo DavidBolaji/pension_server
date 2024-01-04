@@ -10,6 +10,15 @@ export class PhcbController {
       res.status(500).send({ message: 'Server Error', data: [] })
     }
   }
+  public async getUser(req: Request, res: Response) {
+    console.log(req.body.staffId)
+    try {
+      const phcb = await BaseModel.findOne('phcb', req.body.staffId)
+      res.status(200).send({ message: 'PHCB fetch succesfully', data: phcb })
+    } catch (error) {
+      res.status(500).send({ message: 'Server Error', data: [] })
+    }
+  }
   public async create(req: Request, res: Response) {
     try {
       const phcb = await BaseModel.create({ ...req.body }, 'phcb')
