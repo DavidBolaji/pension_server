@@ -7,8 +7,7 @@
     "start": "node dist/src/index.js",
     "dev": "npx nodemon ",
     "prod": "npx nodemon",
-    "build": "rimraf ./build && tsc",
-    "postinstall": "prisma generate"
+    "build": "prisma generate && rimraf ./build && tsc"
   },
   "keywords": [],
   "author": "",
