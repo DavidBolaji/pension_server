@@ -7,12 +7,14 @@
     "start": "node dist/src/index.js",
     "dev": "npx nodemon ",
     "prod": "npx nodemon",
-    "build": "rimraf ./build && tsc"
+    "build": "rimraf ./build && tsc",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.9.1",
     "@sendgrid/mail": "^7.7.0",
     "axios": "^1.5.0",
     "bcryptjs": "^2.4.3",
@@ -50,6 +52,7 @@
     "@types/nodemailer": "^6.4.9",
     "@types/uuid": "^9.0.3",
     "prettier": "^3.0.3",
+    "prisma": "^5.9.1",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1"
   }

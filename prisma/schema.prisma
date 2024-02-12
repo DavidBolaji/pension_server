@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Teacher {
+  id           String   @id @default(uuid())
+  name         String
+  staffId      String
+  phoneNumber  String?
+  DOR          DateTime
+  pfa          String
+  RSA          String
+  attachement1 String?
+  attachement2 String?
+  attachement3 String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
