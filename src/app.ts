@@ -1699,9 +1699,4 @@ const data = [
 //   }
 // }
 
-const seed = async () => {
-  const d = await db.teacher.count({})
-  console.log(d)
-}
-seed()
 export { server }
