@@ -4,7 +4,11 @@ import db from '../../../db/db-two'
 export class TeacherController {
   public async get(req: Request, res: Response) {
     try {
-      const teacher = await db.teacher.findMany({})
+      const teacher = await db.teacher.findMany({
+        include: {
+          deduction: true,
+        },
+      })
       console.log(teacher)
       res
         .status(200)
@@ -19,6 +23,9 @@ export class TeacherController {
       const teacher = await db.teacher.findFirst({
         where: {
           name: req.body.name,
+        },
+        include: {
+          deduction: true,
         },
       })
       res.status(200).send({ message: 'PHCB fetch succesfully', data: teacher })
@@ -60,21 +67,115 @@ export class TeacherController {
     const { id } = req.query
     const key = Object.keys(req.body)
 
-    const teachers = key.map(async k => {
-      await db.teacher.update({
-        where: {
-          id: id as string,
-        },
-        data: {
-          [k]: req.body[k],
-        },
-      })
+    const teachers = await db.teacher.update({
+      where: {
+        id: id as string,
+      },
+      data: {
+        name: typeof req.body.name !== 'undefined' ? req.body.name : undefined,
+        staffId:
+          typeof req.body.staffId !== 'undefined'
+            ? req.body.staffId
+            : undefined,
+        phoneNumber:
+          typeof req.body.phoneNumber !== 'undefined'
+            ? req.body.phoneNumber
+            : undefined,
+        DOR: typeof req.body.DOR !== 'undefined' ? req.body.DOR : undefined,
+        pfa: typeof req.body.pfa !== 'undefined' ? req.body.pfa : undefined,
+        RSA: typeof req.body.RSA !== 'undefined' ? req.body.RSA : undefined,
+        gab: typeof req.body.gab !== 'undefined' ? req.body.gab : undefined,
+        notes:
+          typeof req.body.notes !== 'undefined' ? req.body.notes : undefined,
+        attachement1:
+          typeof req.body.attachement1 !== 'undefined'
+            ? req.body.attachement1
+            : undefined,
+        attachement2:
+          typeof req.body.attachement2 !== 'undefined'
+            ? req.body.attachement2
+            : undefined,
+        attachement3:
+          typeof req.body.attachement3 !== 'undefined'
+            ? req.body.attachement3
+            : undefined,
+      },
     })
+
+    // const teachers = key.map(async k => {
+    //   await db.teacher.update({
+    //     where: {
+    //       id: id as string,
+    //     },
+    //     data: {
+    //       [k]: req.body[k],
+    //     },
+    //   })
+    // })
+
+    const deduction = await db.deduction.upsert({
+      where: {
+        teacherId: teachers.id as string,
+      },
+      update: {
+        otherstate:
+          typeof req.body['otherstate'] !== 'undefined'
+            ? req.body['otherstate']
+            : undefined,
+        overstay:
+          typeof req.body['overstay'] !== 'undefined'
+            ? req.body['overstay']
+            : undefined,
+        vloan:
+          typeof req.body['vloan'] !== 'undefined'
+            ? req.body['vloan']
+            : undefined,
+        ossadec:
+          typeof req.body['ossadec'] !== 'undefined'
+            ? req.body['ossadec']
+            : undefined,
+        totalde:
+          typeof req.body['totalde'] !== 'undefined'
+            ? req.body['totalde']
+            : undefined,
+        nab:
+          typeof req.body['nab'] !== 'undefined' ? req.body['nab'] : undefined,
+        cab:
+          typeof req.body['cab'] !== 'undefined' ? req.body['cab'] : undefined,
+      },
+      create: {
+        otherstate:
+          typeof req.body['otherstate'] !== 'undefined'
+            ? req.body['otherstate']
+            : undefined,
+        overstay:
+          typeof req.body['overstay'] !== 'undefined'
+            ? req.body['overstay']
+            : undefined,
+        vloan:
+          typeof req.body['vloan'] !== 'undefined'
+            ? req.body['vloan']
+            : undefined,
+        ossadec:
+          typeof req.body['ossadec'] !== 'undefined'
+            ? req.body['ossadec']
+            : undefined,
+        totalde:
+          typeof req.body['totalde'] !== 'undefined'
+            ? req.body['totalde']
+            : undefined,
+        nab:
+          typeof req.body['nab'] !== 'undefined' ? req.body['nab'] : undefined,
+        cab:
+          typeof req.body['cab'] !== 'undefined' ? req.body['cab'] : undefined,
+        teacherId: teachers.id,
+      },
+    })
+
     try {
-      const teacher = await Promise.all([teachers])
       res
         .status(200)
-        .send({ message: 'Teacher update succesful', data: teacher })
+        .send({ message: 'Teacher update succesful', data: teachers })
     } catch (error) {
       console.log((error as Error).message)
       res.status(500).send({ message: 'Server Error', data: [] })
